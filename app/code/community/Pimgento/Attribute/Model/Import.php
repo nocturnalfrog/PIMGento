@@ -320,11 +320,17 @@ class Pimgento_Attribute_Model_Import extends Pimgento_Core_Model_Import_Abstrac
 
             $families = explode(',', $data['families']);
 
+            /* Enable different group per attributeset (family)*/
+            $familyGroups = explode(',', $data['group']);
+            while (count($familyGroups) < count($families)) {
+                $familyGroups[] = $familyGroups[0];
+            }
+
             $setup = new Mage_Eav_Model_Entity_Setup('core_setup');
 
-            foreach ($families as $family) {
+            foreach ($families as $key => $family) {
                 if (isset($groups[$family])) {
-                    $groupName = ucfirst($data['group']);
+                    $groupName = ucfirst($familyGroups[$key]);
 
                     $setup->addAttributeGroup('catalog_product', $groups[$family], $groupName);
                     $id = $setup->getAttributeGroupId('catalog_product', $groups[$family], $groupName);
