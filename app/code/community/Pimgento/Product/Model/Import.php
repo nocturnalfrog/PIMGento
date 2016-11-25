@@ -712,6 +712,11 @@ class Pimgento_Product_Model_Import extends Pimgento_Core_Model_Import_Abstract
                 $children = explode(',', $row['_children']);
 
                 foreach ($children as $child) {
+                    $values = array(
+                        'parent_id = ?' => $row['entity_id']
+                    );
+                    $adapter->delete($resource->getTable('catalog/product_relation'), $values);
+                    $adapter->delete($resource->getTable('catalog/product_super_link'), $values);
 
                     $childId = $adapter->fetchOne(
                         $adapter->select()
