@@ -1,10 +1,10 @@
 <?php
+
 /**
  * @author    Agence Dn'D <magento@dnd.fr>
  * @copyright Copyright (c) 2015 Agence Dn'D (http://www.dnd.fr)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
 {
 
@@ -68,7 +68,7 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
      */
     public function updateTable($task)
     {
-        $adapter  = $this->getAdapter();
+        $adapter = $this->getAdapter();
 
         $column = $this->columnExists('axis') ? 'axis' : 'attributes';
 
@@ -99,7 +99,11 @@ class Pimgento_Variant_Model_Import extends Pimgento_Core_Model_Import_Abstract
                     'REPLACE(axis, "' . $attribute->getAttributeCode() . '", "' . $attribute->getAttributeId() . '")'
                 )
             );
-            $adapter->update($adapter->getTableName('pimgento_variant'), $values);
+            $adapter->update(
+                $adapter->getTableName('pimgento_variant'),
+                $values,
+                'FIND_IN_SET("' . $attribute->getAttributeCode() . '", axis)'
+            );
         }
 
         return true;
